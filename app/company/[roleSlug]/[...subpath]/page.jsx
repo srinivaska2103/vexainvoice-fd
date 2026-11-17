@@ -19,6 +19,7 @@ import PaymentsPage from '@/app/payments/page';
 import ReportsPage from '@/app/reports/page';
 import SalesHistoryPage from '@/app/sales/page';
 import NewSalePage from '@/app/sales/new/page';
+import QuickBillPage from '@/app/sales/quick/page';
 import CustomerOrdersPage from '@/app/sales/orders/page';
 import SalesReturnsPage from '@/app/sales/returns/page';
 import ScannerPage from '@/app/scanner/page';
@@ -116,6 +117,7 @@ export default function CompanyRoleSubpathPage() {
 
     'sales': { component: <SalesHistoryPage />, perm: 'sales.view' },
     'sales/new': { component: <NewSalePage />, perm: 'sales.create' },
+    'sales/quick': { component: <QuickBillPage />, perm: 'sales.create' },
     'sales/orders': { component: <CustomerOrdersPage />, perm: 'sales.view', adminOnly: true },
     'sales/returns': { component: <SalesReturnsPage />, perm: 'sales.return' },
     'scanner': { component: <ScannerPage />, perm: 'scanner.view', adminOnly: true },

@@ -41,23 +41,28 @@ const signupSchema = z
 
 export default function SignupPage() {
   const router = useRouter();
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [apiError, setApiError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Authenticated users should not be on public signup
+  // If user explicitly visits /signup, clear any existing session so they can register a new account cleanly
   useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      if (user?.role === 'ADMIN') {
-        router.push('/settings/users');
-      } else {
-        router.push('/dashboard');
+    if (typeof window !== 'undefined') {
+      const hasToken = sessionStorage.getItem('vexa_token') || localStorage.getItem('vexa_token');
+      if (hasToken) {
+        sessionStorage.removeItem('vexa_token');
+        sessionStorage.removeItem('vexa_user');
+        sessionStorage.removeItem('vexa_business');
+        localStorage.removeItem('vexa_token');
+        localStorage.removeItem('vexa_user');
+        localStorage.removeItem('vexa_business');
+        logout({ redirect: false });
       }
     }
-  }, [isAuthenticated, authLoading, user, router]);
+  }, [logout]);
 
   const {
     register,

@@ -105,7 +105,25 @@ export default function BarcodeLabelsPage() {
   const variantInfo = [brandName, colorName, sizeName].filter(Boolean).join(' / ');
 
   const sku = selectedVariant?.sku || selectedProduct?.sku || '';
-  const barcodeValue = selectedVariant?.barcode || selectedProduct?.barcode || selectedVariant?.sku || selectedProduct?.sku || '102458';
+
+  // Helper to get true barcode value (prioritizing product or variant numeric barcode over SKU)
+  const getEffectiveBarcode = (v, prod) => {
+    const vBarcode = v?.barcode ? String(v.barcode).trim() : '';
+    const vSku = v?.sku ? String(v.sku).trim() : '';
+    const prodBarcode = prod?.barcode ? String(prod.barcode).trim() : '';
+    const prodSku = prod?.sku ? String(prod.sku).trim() : '';
+
+    // If variant has its own unique barcode distinct from sku
+    if (vBarcode && vBarcode !== vSku) return vBarcode;
+    // If product has a barcode (e.g. numeric barcode: 0836000291452)
+    if (prodBarcode) return prodBarcode;
+    // Fallback to variant barcode if present
+    if (vBarcode) return vBarcode;
+    // Final fallback to SKU or default code
+    return vSku || prodSku || '102458';
+  };
+
+  const barcodeValue = getEffectiveBarcode(selectedVariant, selectedProduct);
 
   const price = selectedVariant?.retail_price ?? selectedProduct?.retail_price ?? selectedProduct?.price ?? 0;
 
@@ -190,7 +208,7 @@ export default function BarcodeLabelsPage() {
             id: `${prod.id}-${v.id}`,
             productName: prod.name,
             variantInfo: vStr,
-            barcodeValue: v.barcode || v.sku || prod.barcode || prod.sku || '102458',
+            barcodeValue: getEffectiveBarcode(v, prod),
             price: v.retail_price ?? prod.retail_price ?? 0
           });
         });
@@ -200,7 +218,7 @@ export default function BarcodeLabelsPage() {
           id: prod.id,
           productName: prod.name,
           variantInfo: bName,
-          barcodeValue: prod.barcode || prod.sku || '102458',
+          barcodeValue: getEffectiveBarcode(null, prod),
           price: prod.retail_price ?? prod.price ?? 0
         });
       }
@@ -432,9 +450,10 @@ export default function BarcodeLabelsPage() {
                         const colorVal = v.colors?.name || v.color?.name || v.color || '';
                         const sizeVal = v.sizes?.name || v.size?.name || v.size || '';
                         const vName = v.variant_name || [colorVal, sizeVal].filter(Boolean).join(' / ') || 'Variant';
+                        const vCode = getEffectiveBarcode(v, selectedProduct);
                         return {
                           value: v.id,
-                          label: `${vName} — SKU: ${v.sku || '-'} — ₹${Number(v.retail_price || selectedProduct?.retail_price || 0).toFixed(2)}`
+                          label: `${vName} — Barcode: ${vCode} — ₹${Number(v.retail_price || selectedProduct?.retail_price || 0).toFixed(2)}`
                         };
                       })}
                     />

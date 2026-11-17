@@ -204,16 +204,23 @@ export default function SettingsPage() {
               </p>
             </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setIsQrModalOpen(true)}
-              className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 font-bold shadow-xs shrink-0 cursor-pointer"
-            >
-              <QrCode className="w-4 h-4 mr-2 text-indigo-600" />
-              Catalogue QR Code
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setIsQrModalOpen(true)}
+                className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 font-bold shadow-xs shrink-0 cursor-pointer"
+              >
+                <QrCode className="w-4 h-4 mr-2 text-indigo-600" />
+                <span>Catalogue QR Code</span>
+                {!(business?.subscription_tier === 'GROWTH' || business?.subscription_tier === 'LIFETIME' || business?.self_shopping_status === 'GROWTH_ACTIVE' || business?.self_shopping_status === 'LIFETIME_ACTIVE') && (
+                  <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-100 text-amber-800">
+                    <Lock className="w-3 h-3 mr-0.5 inline" /> Growth
+                  </span>
+                )}
+              </Button>
+            </div>
           </div>
 
           {/* 1. BUSINESS INFO & LOGO CARD */}

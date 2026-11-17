@@ -22,7 +22,7 @@ export function DashboardLayout({ children }) {
                           (business?.subscription_status === 'PENDING' && business?.license_status !== 'ACTIVE');
 
   // Allowed pages during restricted state (only Subscription & Billing is open)
-  const isSettingsOrBilling = pathname?.startsWith('/settings/subscription');
+  const isSettingsOrBilling = pathname?.includes('/settings/subscription');
 
   const homeHref = getRoleDashboard(role, user?.custom_role?.slug);
 
@@ -65,7 +65,7 @@ export function DashboardLayout({ children }) {
                 </div>
                 <div className="flex justify-between items-baseline">
                   <span className="text-base font-extrabold text-slate-900">VEXA Invoice Monthly</span>
-                  <span className="text-2xl font-black text-slate-900">₹599<span className="text-xs font-semibold text-slate-500">/mo</span></span>
+                  <span className="text-2xl font-black text-slate-900">₹1<span className="text-xs font-semibold text-slate-500">/mo</span></span>
                 </div>
               </div>
 
@@ -74,7 +74,7 @@ export function DashboardLayout({ children }) {
                 className="w-full inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/30 transition-all cursor-pointer"
               >
                 <CreditCard className="w-4 h-4 mr-2" />
-                Subscribe Now — ₹599/month
+                Subscribe Now — ₹1/month
               </Link>
             </div>
           </main>

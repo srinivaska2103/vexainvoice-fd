@@ -253,12 +253,10 @@ export const useAuthStore = create((set, get) => ({
       sessionStorage.removeItem('vexa_user');
       sessionStorage.removeItem('vexa_business');
 
-      // If global logout requested, clear localStorage as well
-      if (options.global === true) {
-        localStorage.removeItem('vexa_token');
-        localStorage.removeItem('vexa_user');
-        localStorage.removeItem('vexa_business');
-      }
+      // Always clear localStorage as well so logging out clears persistent login credentials
+      localStorage.removeItem('vexa_token');
+      localStorage.removeItem('vexa_user');
+      localStorage.removeItem('vexa_business');
 
       if (options.redirect !== false) {
         window.location.href = options.targetUrl || targetRedirect;

@@ -408,8 +408,8 @@ export function Header({ setIsMobileOpen }) {
           )}
         </div>
 
-        <Link href="/sales/new">
-          <Button size="sm" className="hidden sm:inline-flex">
+        <Link href="/sales/quick" target="_blank" rel="noopener noreferrer">
+          <Button size="sm" className="hidden sm:inline-flex bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xs">
             <Plus className="w-4 h-4 mr-1.5" />
             New Sale
           </Button>

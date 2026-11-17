@@ -17,7 +17,8 @@ import {
   Clock,
   CreditCard,
   CheckCircle2,
-  QrCode
+  QrCode,
+  Lock
 } from 'lucide-react';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -106,7 +107,12 @@ export default function DashboardPage() {
                   title="View & Download Shop Catalogue QR Code"
                 >
                   <QrCode className="w-4 h-4 mr-1.5 sm:mr-2 text-indigo-600 shrink-0" />
-                  Catalogue QR
+                  <span>Catalogue QR</span>
+                  {!(business?.subscription_tier === 'GROWTH' || business?.subscription_tier === 'LIFETIME' || business?.self_shopping_status === 'GROWTH_ACTIVE' || business?.self_shopping_status === 'LIFETIME_ACTIVE') && (
+                    <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-100 text-amber-800">
+                      <Lock className="w-3 h-3 mr-0.5 inline" /> Growth
+                    </span>
+                  )}
                 </Button>
               )}
               <Button 
@@ -128,7 +134,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Compact Free Trial Status Card (ADMIN only) */}
+          {/* Active Subscription Upgrade / Alert Card (ADMIN only) */}
           {isAdmin && (subStatus?.subscription?.status === 'TRIALING' || subStatus?.access?.isTrial) && (
             <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 rounded-2xl p-4 sm:p-5 text-white shadow-lg shadow-indigo-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-start sm:items-center space-x-3.5">
@@ -137,23 +143,13 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <span className="font-black text-sm tracking-tight">Free Trial</span>
+                    <span className="font-black text-sm tracking-tight">VEXA Invoice Subscription</span>
                     <span className="bg-white/20 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded-full backdrop-blur-sm">
-                      {subStatus?.access?.daysRemaining ?? 7} Days Remaining
+                      Commercial Plan
                     </span>
                   </div>
                   <p className="text-xs text-blue-100 mt-0.5 font-medium">
-                    Full access enabled until{' '}
-                    <strong className="text-white font-bold">
-                      {subStatus?.subscription?.trial_end_at || subStatus?.access?.trialEnd
-                        ? new Date(subStatus?.subscription?.trial_end_at || subStatus?.access?.trialEnd).toLocaleDateString('en-IN', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric'
-                          })
-                        : '7 days'}
-                    </strong>
-                    . Subscribe at any time to continue uninterrupted.
+                    Ensure uninterrupted access to all enterprise billing, inventory, and point-of-sale features.
                   </p>
                 </div>
               </div>
@@ -162,7 +158,7 @@ export default function DashboardPage() {
                 <Link href="/settings/subscription">
                   <Button size="sm" className="bg-white text-indigo-700 hover:bg-blue-50 font-black shadow-sm text-xs px-4 py-2 rounded-xl transition cursor-pointer">
                     <CreditCard className="w-3.5 h-3.5 mr-1.5" />
-                    Subscribe Now — ₹599/mo
+                    Manage Subscription
                   </Button>
                 </Link>
               </div>
@@ -394,7 +390,14 @@ export default function DashboardPage() {
                               <QrCode className="w-5 h-5" />
                             </div>
                             <div>
-                              <p className="text-xs font-bold text-slate-900 group-hover:text-indigo-600">Customer Shop QR</p>
+                              <div className="flex items-center space-x-1.5">
+                                <p className="text-xs font-bold text-slate-900 group-hover:text-indigo-600">Customer Shop QR</p>
+                                {!(business?.subscription_tier === 'GROWTH' || business?.subscription_tier === 'LIFETIME' || business?.self_shopping_status === 'GROWTH_ACTIVE' || business?.self_shopping_status === 'LIFETIME_ACTIVE') && (
+                                  <span className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-black bg-amber-100 text-amber-800">
+                                    <Lock className="w-2.5 h-2.5 mr-0.5 inline" /> Growth
+                                  </span>
+                                )}
+                              </div>
                               <p className="text-[11px] text-slate-500">Scan & download public catalogue QR</p>
                             </div>
                           </div>

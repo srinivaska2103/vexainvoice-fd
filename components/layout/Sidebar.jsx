@@ -464,7 +464,9 @@ export function Sidebar({ isMobileOpen, setIsMobileOpen }) {
                               return (
                                 <Link
                                   key={child.name}
-                                  href={targetChildHref}
+                                  href={child.href === '/sales/new' ? '/sales/quick' : targetChildHref}
+                                  target={child.href === '/sales/new' ? '_blank' : undefined}
+                                  rel={child.href === '/sales/new' ? 'noopener noreferrer' : undefined}
                                   data-active={isActive ? "true" : "false"}
                                   onClick={() => {
                                     if (setIsMobileOpen) setIsMobileOpen(false);
